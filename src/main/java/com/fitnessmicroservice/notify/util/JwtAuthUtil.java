@@ -36,11 +36,13 @@ public class JwtAuthUtil {
     }
 
     public String getUsernameFromToken(String token){
+        System.out.println("Extracting username from token: " + token);
         Claims claim = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+        System.out.println("Claims from token: " + claim);
         return claim.getSubject();
     }
 

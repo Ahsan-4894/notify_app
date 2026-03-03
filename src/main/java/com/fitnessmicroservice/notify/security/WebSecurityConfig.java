@@ -1,5 +1,6 @@
 package com.fitnessmicroservice.notify.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -33,13 +34,28 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(ex -> ex.
-                        authenticationEntryPoint((request, response, authException) ->{
-                            handlerExceptionResolver.resolveException(request, response, null,  authException);
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+            {
+              "message": "Authentication is required to access this resource",
+              "statusCode": 401
+            }
+        """);
                         })
-                        .accessDeniedHandler((request, response, accessDeniedException)->{
-                            handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);
-                        }));
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+            {
+              "message": "You are not authorized to access this resource",
+              "statusCode": 403
+            }
+        """);
+                        })
+                );
         return httpSecurity.build();
     }
 }

@@ -15,6 +15,7 @@ import com.fitnessmicroservice.notify.util.AuthContext;
 import com.fitnessmicroservice.notify.util.CookieUtil;
 import com.fitnessmicroservice.notify.util.JwtAuthUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -116,5 +117,24 @@ public class UserService {
 
         userRepo.save(user);
         return Boolean.TRUE;
+    }
+
+    public UserRegisterResponseDto registerAsAdmin(@Valid UserRegisterRequestDto userRegisterRequest) {
+        User user = userRepo.findByUsername(userRegisterRequest.getUsername()).orElse(null);
+        if(user != null)
+            throw new UserAlreadyExistException("Admin with this username: " + userRegisterRequest.getUsername() + " already exists");
+
+        user = User.builder()
+                .username(userRegisterRequest.getUsername())
+                .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
+                .role("ROLE_ADMIN")
+                .build();
+        userRepo.save(user);
+        return UserRegisterResponseDto.builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .message("Admin registered successfully")
+                .success(Boolean.TRUE)
+                .build();
     }
 }

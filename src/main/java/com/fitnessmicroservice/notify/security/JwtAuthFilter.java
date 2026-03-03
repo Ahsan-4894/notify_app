@@ -35,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             String token = null;
             String username = null;
-
+            System.out.println("Under Do Filter Internal");
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
@@ -45,12 +45,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
             if (token == null || token.isEmpty()) {
+                System.out.println("No token found in cookies");
                 filterChain.doFilter(request, response);
                 return;
             }
+            System.out.println("Token from cookies: " + token);
 
             username = jwtAuthUtil.getUsernameFromToken(token);
-
+            System.out.println("Username from token: " + username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
                 if (jwtAuthUtil.validateToken(token, userDetails)) {

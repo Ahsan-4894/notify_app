@@ -4,12 +4,11 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/notify_app
     username: postgres
-    password: ahsan.130104
+    password: ahsan
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
 
 server:
   port: 8080

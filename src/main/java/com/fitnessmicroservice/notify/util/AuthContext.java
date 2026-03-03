@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AuthContext {
     public UserPrincipal getCurrentLoggedInUser() {
+        System.out.println("Under AuthContext.getCurrentLoggedInUser()");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
             return (UserPrincipal) authentication.getPrincipal();
         }
+        System.out.println("No authenticated user found in the security context");
         throw new UserNotFoundException("No authenticated user found");
     }
     public String getIdOfCurrentLoggedInUser(){

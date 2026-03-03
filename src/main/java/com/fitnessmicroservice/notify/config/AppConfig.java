@@ -16,6 +16,7 @@ public class AppConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        System.out.println("AuthenticationManager bean created");
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
