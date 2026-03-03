@@ -1,0 +1,16 @@
+package com.fitnessmicroservice.notify.dto.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserDashboardDto {
+    private String userId;
+    private Long notesCount;
+}
+

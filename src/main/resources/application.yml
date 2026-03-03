@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: notify
+  datasource:
+    url: jdbc:postgresql://localhost:5432/notify_app
+    username: postgres
+    password: ahsan.130104
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+jwt:
+  secret:
+    key: verysecurekeyevenisraelcantbreakithahahahaha
