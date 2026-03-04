@@ -2,7 +2,7 @@ spring:
   application:
     name: notify
   datasource:
-    url: jdbc:postgresql://localhost:5432/notify_app
+    url: jdbc:postgresql://localhost:5433/notify_app
     username: postgres
     password: ahsan
     driver-class-name: org.postgresql.Driver

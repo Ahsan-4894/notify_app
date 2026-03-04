@@ -28,14 +28,15 @@ public class WebSecurityConfig {
                         sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/note/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers("/notes/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
+//                            Here it throws this error to be precise: InsufficientAuthenticationException
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.setContentType("application/json");
                             response.getWriter().write("""
@@ -50,7 +51,7 @@ public class WebSecurityConfig {
                             response.setContentType("application/json");
                             response.getWriter().write("""
             {
-              "message": "You are not authorized to access this resource",
+              "message": "You are not authorized to access this resource",  
               "statusCode": 403
             }
         """);

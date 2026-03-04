@@ -1,7 +1,10 @@
 package com.fitnessmicroservice.notify.controller;
 
 import com.fitnessmicroservice.notify.dto.response.UserDashboardDto;
+import com.fitnessmicroservice.notify.dto.response.UserLogoutResponseDto;
+import com.fitnessmicroservice.notify.dto.response.UserResponseDto;
 import com.fitnessmicroservice.notify.service.AdminService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,16 @@ public class AdminController {
     public ResponseEntity<List<UserDashboardDto>> getDashboard() {
         List<UserDashboardDto> dashboard = adminService.getDashboard();
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getAdminInfo() {
+        return new ResponseEntity<>(adminService.getMyself(), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<UserLogoutResponseDto> logout(HttpServletResponse response) {
+        return new ResponseEntity<>(adminService.logout(response), HttpStatus.OK);
     }
 }
 

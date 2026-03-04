@@ -5,6 +5,7 @@ import com.fitnessmicroservice.notify.dto.request.UpdateNoteRequestDto;
 import com.fitnessmicroservice.notify.dto.response.NoteResponseDto;
 import com.fitnessmicroservice.notify.entity.Note;
 import com.fitnessmicroservice.notify.entity.User;
+import com.fitnessmicroservice.notify.entity.UserPrincipal;
 import com.fitnessmicroservice.notify.exception.custom.NoteNotFoundException;
 import com.fitnessmicroservice.notify.exception.custom.UserNotFoundException;
 import com.fitnessmicroservice.notify.repository.NoteRepo;
@@ -13,13 +14,14 @@ import com.fitnessmicroservice.notify.util.AuthContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class NoteService {
     private final NoteRepo noteRepo;
-    private final UserRepo userRepo;
     private final AuthContext authContext;
-    private final UserService userService;;
+    private final UserService userService;
 
     public NoteResponseDto createNote(CreateNoteRequestDto requestDto) {
         String userId = authContext.getIdOfCurrentLoggedInUser();
@@ -36,10 +38,17 @@ public class NoteService {
     }
 
     public NoteResponseDto getNoteById(String noteId) {
-        String userId = authContext.getIdOfCurrentLoggedInUser();
+        UserPrincipal userPrincipal = authContext.getCurrentLoggedInUser();
+        String userId = userPrincipal.getUser().getId();
+        String role = userPrincipal.getUser().getRole();
 
         Note note = noteRepo.findById(noteId)
                 .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
+
+//        If the incoming user is admin, show note to him
+        if(role.equals("ROLE_ADMIN")) {
+            return mapToResponseDto(note);
+        }
 
         if (note.getUser() == null || !note.getUser().getId().equals(userId)) {
             throw new NoteNotFoundException("Note not found with id: " + noteId);
@@ -86,5 +95,15 @@ public class NoteService {
                 .createdAt(note.getCreatedAt())
                 .updatedAt(note.getUpdatedAt())
                 .build();
+    }
+
+    public List<NoteResponseDto> getAllNotesOfAUser() {
+        String userId = authContext.getIdOfCurrentLoggedInUser();
+//        What if this user has no notes?
+        List<Note> notes = noteRepo.findByUserId(userId);
+        if(notes.isEmpty())
+            throw new NoteNotFoundException("Notes not found for this user: " + userId);
+
+        return notes.stream().map(this::mapToResponseDto).toList();
     }
 }

@@ -6,9 +6,12 @@ import com.fitnessmicroservice.notify.dto.response.NoteResponseDto;
 import com.fitnessmicroservice.notify.service.NoteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/notes")
@@ -41,5 +44,11 @@ public class NoteController {
     public ResponseEntity<Boolean> deleteNote(@PathVariable String noteId) {
         noteService.deleteNote(noteId);
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<NoteResponseDto>> getAllNotesOfAUser(){
+        List<NoteResponseDto> allNotesOfAUser = noteService.getAllNotesOfAUser();
+        return new ResponseEntity<>(allNotesOfAUser, HttpStatus.OK);
     }
 }

@@ -11,4 +11,6 @@ import java.util.List;
 public interface NoteRepo extends JpaRepository<Note, String> {
     @Query(value = "SELECT u.id as userId, COUNT(n.id) as notesCount FROM users u JOIN notes n ON u.id = n.user_id GROUP BY u.id", nativeQuery = true)
     List<Object[]> getUsersWithNotesCount();
+
+    List<Note> findByUserId(String userId);
 }
