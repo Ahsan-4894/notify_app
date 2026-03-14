@@ -1,8 +1,10 @@
 package com.fitnessmicroservice.notify.service;
 
+import com.fitnessmicroservice.notify.dto.response.NoteResponseDto;
 import com.fitnessmicroservice.notify.dto.response.UserDashboardDto;
 import com.fitnessmicroservice.notify.dto.response.UserLogoutResponseDto;
 import com.fitnessmicroservice.notify.dto.response.UserResponseDto;
+import com.fitnessmicroservice.notify.entity.Note;
 import com.fitnessmicroservice.notify.entity.User;
 import com.fitnessmicroservice.notify.exception.custom.UserNotFoundException;
 import com.fitnessmicroservice.notify.repository.NoteRepo;
@@ -59,5 +61,17 @@ public class AdminService {
                 .build();
 
     }
-}
 
+    public List<NoteResponseDto> getAllNotes() {
+        List<Note> allNotes = noteRepo.findAll();
+        return allNotes.stream()
+                .map(note -> NoteResponseDto.builder()
+                        .id(note.getId())
+                        .title(note.getTitle())
+                        .content(note.getContent())
+                        .createdAt(note.getCreatedAt())
+                        .updatedAt(note.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
+    }
+}

@@ -102,6 +102,7 @@
     </dependencies>
 
     <build>
+        <finalName>crud-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -115,7 +116,6 @@
                     </annotationProcessorPaths>
                     <source>24</source>
                     <target>24</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

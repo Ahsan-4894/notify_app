@@ -1,5 +1,6 @@
 package com.fitnessmicroservice.notify.controller;
 
+import com.fitnessmicroservice.notify.dto.response.NoteResponseDto;
 import com.fitnessmicroservice.notify.dto.response.UserDashboardDto;
 import com.fitnessmicroservice.notify.dto.response.UserLogoutResponseDto;
 import com.fitnessmicroservice.notify.dto.response.UserResponseDto;
@@ -35,5 +36,10 @@ public class AdminController {
     public ResponseEntity<UserLogoutResponseDto> logout(HttpServletResponse response) {
         return new ResponseEntity<>(adminService.logout(response), HttpStatus.OK);
     }
-}
 
+    @GetMapping("/notes")
+    public ResponseEntity<List<NoteResponseDto>> getAllNotes() {
+        List<NoteResponseDto> allNotes = adminService.getAllNotes();
+        return new ResponseEntity<>(allNotes, HttpStatus.OK);
+    }
+}
