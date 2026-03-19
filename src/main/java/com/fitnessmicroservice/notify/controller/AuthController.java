@@ -25,6 +25,12 @@ public class AuthController {
         return new ResponseEntity<>("HELLO!", HttpStatus.OK);
     }
 
+
+    @GetMapping("/test-2")
+    public ResponseEntity<String> test2(){
+        return new ResponseEntity<>("Your server is live on EC2, Check it out there!", HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         return new ResponseEntity<>(userService.login(userLoginRequestDto, response), HttpStatus.OK);
@@ -39,5 +45,6 @@ public class AuthController {
     public ResponseEntity<UserRegisterResponseDto> registerAsAdmin(@Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         return new ResponseEntity<>(userService.registerAsAdmin(userRegisterRequestDto), HttpStatus.CREATED);
     }
+
 
 }
