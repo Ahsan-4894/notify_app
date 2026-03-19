@@ -14,7 +14,7 @@ services:
     networks:
         - my-net
 
-  app:
+  server:
     build: .
     depends_on:
       - postgres
